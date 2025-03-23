@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contabilidade UGB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="https://portal2.ugb.edu.br/Content/img/logoUGBWhiteM.png" 
+             alt="Logo da Universidade UGB" 
+             class="user-image" 
+             width="80"
+             height="80">
+        <h1>Sistema de Contabilidade UGB</h1>
+        <nav role="navigation" aria-label="Menu principal">
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#clientes">Clientes</a></li>
+                <li><a href="#fornecedores">Fornecedores</a></li>
+                <li><a href="#transacoes">Transações</a></li>
+                <li><a href="#relatorios">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="dashboard" class="content" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title">Dashboard</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>Receita Total</h3>
+                    <p>R$ </p>
+                </div>
+                <div class="card">
+                    <h3>Despesa Total</h3>
+                    <p>R$ </p>
+                </div>
+                <div class="card">
+                    <h3>Saldo Atual</h3>
+                    <p>R$ </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="clientes" class="content" aria-labelledby="clientes-title">
+            <h2 id="clientes-title">Clientes</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ/CPF</th>
+                            <th>Endereço</th>
+                            <th>Contato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cliente A</td>
+                            <td>123.456.789-00</td>
+                            <td>Rua X, 123</td>
+                            <td>cliente@email.com</td>
+                        </tr>
+                        <tr>
+                            <td>Cliente B</td>
+                            <td>987.654.321-00</td>
+                            <td>Rua Y, 456</td>
+                            <td>cliente2@email.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="fornecedores" class="content" aria-labelledby="fornecedores-title">
+            <h2 id="fornecedores-title">Fornecedores</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ/CPF</th>
+                            <th>Endereço</th>
+                            <th>Contato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fornecedor A</td>
+                            <td>111.222.333-00</td>
+                            <td>Rua Z, 789</td>
+                            <td>fornecedor@email.com</td>
+                        </tr>
+                        <tr>
+                            <td>Fornecedor B</td>
+                            <td>444.555.666-00</td>
+                            <td>Rua W, 1011</td>
+                            <td>fornecedor2@email.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="transacoes" class="content" aria-labelledby="transacoes-title">
+            <h2 id="transacoes-title">Transações</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2023-10-26</td>
+                            <td>Venda de produto</td>
+                            <td>R$ 100,00</td>
+                            <td>Receita</td>
+                        </tr>
+                        <tr>
+                            <td>2023-10-25</td>
+                            <td>Compra de material</td>
+                            <td>R$ 50,00</td>
+                            <td>Despesa</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="relatorios" class="content" aria-labelledby="relatorios-title">
+            <h2 id="relatorios-title">Relatórios</h2>
+            <button>Gerar Relatório de Fluxo de Caixa</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Contabilidade UGB</p>
+    </footer>
+</body>
+</html>
