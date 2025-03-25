@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contabilidade UGB</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <!--LINK PARA FUNCIONALIDADE QUE O JONAS IRÁ TENTAR FAZER-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style> </style><!--TALVEZ ADICIONAR OUTRO ESTILO, OU GRAFICO-->
+</head>
+<body>
+    <header>
+        <img src="https://portal2.ugb.edu.br/Content/img/logoUGBWhiteM.png"
+             alt="Logo da UGB"
+             class="user-image"
+             width="80"
+             height="80">
+        <h1>Sistema de Contabilidade UGB</h1>
+        <nav role="navigation" aria-label="Menu principal">
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#clientes">Clientes</a></li>
+                <li><a href="#fornecedores">Fornecedores</a></li>
+                <li><a href="#transacoes">Transações</a></li>
+                <li><a href="#relatorios">Relatórios</a></li>
+                <li><a href="#ajuda">Ajuda</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="dashboard" class="content" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title">Dashboard</h2>
+            <div class="cards">
+                <div class="card"><h3>Receita Total</h3><p>R$ 0,00</p></div>
+                <div class="card"><h3>Despesa Total</h3><p>R$ 0,00</p></div>
+                <div class="card"><h3>Saldo Atual</h3><p>R$ 0,00</p></div>
+            </div>
+            <canvas id="graficoDashboard"></canvas>
+        </section>
+
+        <section id="clientes" class="content" aria-labelledby="clientes-title">
+            <h2 id="clientes-title">Clientes</h2>
+            <div class="filtro-pesquisa">
+                <input type="text" id="pesquisaCliente" placeholder="Pesquisar cliente...">
+                <button id="filtrarCliente">Filtrar</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ/CPF</th>
+                            <th>Endereço</th>
+                            <th>Contato</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaClientes"></tbody>
+                </table>
+            </div>
+            <button id="cadastrarCliente">Cadastrar Cliente</button>
+        </section>
+
+        <section id="fornecedores" class="content" aria-labelledby="fornecedores-title">
+            <h2 id="fornecedores-title">Fornecedores</h2>
+            <div class="filtro-pesquisa">
+                <input type="text" id="pesquisaFornecedor" placeholder="Pesquisar fornecedor...">
+                <button id="filtrarFornecedor">Filtrar</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ/CPF</th>
+                            <th>Endereço</th>
+                            <th>Contato</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaFornecedores"></tbody>
+                </table>
+            </div>
+            <button id="cadastrarFornecedor">Cadastrar Fornecedor</button>
+        </section>
+
+        <section id="transacoes" class="content" aria-labelledby="transacoes-title">
+            <h2 id="transacoes-title">Transações</h2>
+            <div class="filtro-pesquisa">
+                <input type="date" id="filtroDataInicio">
+                <input type="date" id="filtroDataFim">
+                <select id="filtroTipo">
+                    <option value="">Todos</option>
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                </select>
+                <input type="text" id="pesquisaTransacao" placeholder="Pesquisar transação...">
+                <button id="filtrarTransacao">Filtrar</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaTransacoes"></tbody>
+                </table>
+            </div>
+            <button id="cadastrarTransacao">Cadastrar Transação</button>
+        </section>
+
+        <section id="relatorios" class="content" aria-labelledby="relatorios-title">
+            <h2 id="relatorios-title">Relatórios</h2>
+            <button id="gerarRelatorioFluxoCaixa">Gerar Relatório de Fluxo de Caixa</button>
+            <canvas id="graficoRelatorio"></canvas>
+        </section>
+
+        <section id="ajuda" class="content" aria-labelledby="ajuda-title">
+            <h2 id="ajuda-title">Ajuda</h2>
+            <p>Informações sobre como usar o sistema.</p>
+            <button>Contato ao Suporte</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Contabilidade UGB</p>
+        <p>Direitos reservados a Rabelo</p>
+    </footer>
+
+    <script>
+       // Obtendo os elementos
+const listaClientes = document.getElementById("listaClientes");
+const listaFornecedores = document.getElementById("listaFornecedores");
+const listaTransacoes = document.getElementById("listaTransacoes");
+const btnCadastrarCliente = document.getElementById("cadastrarCliente");
+const btnCadastrarFornecedor = document.getElementById("cadastrarFornecedor");
+const btnCadastrarTransacao = document.getElementById("cadastrarTransacao");
+const btnFiltrarCliente = document.getElementById("filtrarCliente");
+const btnFiltrarFornecedor = document.getElementById("filtrarFornecedor");
+const btnFiltrarTransacao = document.getElementById("filtrarTransacao");
+const btnGerarRelatorioFluxoCaixa = document.getElementById("gerarRelatorioFluxoCaixa");
+const graficoDashboardCtx = document
+  .getElementById("graficoDashboard")
+  .getContext("2d");
+const graficoRelatorioCtx = document
+  .getElementById("graficoRelatorio")
+  .getContext("2d");
+
+// Dados iniciais (teste)
+let clientes = [
+    { nome: "Jonas Viado", cnpjCpf: "123.456.789-01", endereco: "xxx", contato: "(11) 99999-1111" },
+    { nome: "Caio Baitola", cnpjCpf: "987.654.321-02", endereco: "xxx", contato: "(22) 88888-2222" },
+];
+
+let fornecedores = [
+    { nome: "Empresa X", cnpjCpf: "xxx", endereco: "xxx", contato: "xxx" },
+    { nome: "Empresa Y", cnpjCpf: "xxx", endereco: "xxx", contato: "xxx" },
+];
+
+let transacoes = [
+    { data: "2025-01-10", descricao: "Venda de produtos", valor: 1500.00, tipo: "receita" },
+    { data: "2xxxxxx", descricao: "Pagamento de aluguel", valor: 500.00, tipo: "despesa" },
+    { data: "xxxxxx", descricao: "Compra de materiais", valor: 200.00, tipo: "despesa" },
+    { data: "xxxxxx", descricao: "Serviço prestado", valor: 1000.00, tipo: "receita" },
+];
+
+// Funções para exibir dados nas tabelas
+function exibirClientes() {
+    listaClientes.innerHTML = "";
+    clientes.forEach((cliente) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${cliente.nome}</td>
+            <td>${cliente.cnpjCpf}</td>
+            <td>${cliente.endereco}</td>
+            <td>${cliente.contato}</td>
+            <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaClientes.appendChild(row);
+    });
+}
+
+function exibirFornecedores() {
+    listaFornecedores.innerHTML = "";
+    fornecedores.forEach((fornecedor) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${fornecedor.nome}</td>
+            <td>${fornecedor.cnpjCpf}</td>
+            <td>${fornecedor.endereco}</td>
+            <td>${fornecedor.contato}</td>
+            <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaFornecedores.appendChild(row);
+    });
+}
+
+function exibirTransacoes() {
+    listaTransacoes.innerHTML = "";
+    transacoes.forEach((transacao) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${transacao.data}</td>
+            <td>${transacao.descricao}</td>
+            <td>R$ ${transacao.valor.toFixed(2)}</td>
+            <td>${transacao.tipo}</td>
+            <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaTransacoes.appendChild(row);
+    });
+}
+
+// Funções para cadastrar novos dados (simulando um formulário)
+function cadastrarCliente() {
+    const nome = prompt("Nome do cliente:");
+    const cnpjCpf = prompt("CNPJ/CPF:");
+    const endereco = prompt("Endereço:");
+    const contato = prompt("Contato:");
+    if (nome && cnpjCpf && endereco && contato) {
+        clientes.push({ nome, cnpjCpf, endereco, contato });
+        exibirClientes();
+        alert("Cliente cadastrado com sucesso!");
+    } else {
+        alert("Preencha todos os campos!");
+    }
+}
+
+function cadastrarFornecedor() {
+    const nome = prompt("Nome do fornecedor:");
+    const cnpjCpf = prompt("CNPJ/CPF:");
+    const endereco = prompt("Endereço:");
+    const contato = prompt("Contato:");
+    if (nome && cnpjCpf && endereco && contato) {
+        fornecedores.push({ nome, cnpjCpf, endereco, contato });
+        exibirFornecedores();
+        alert("Fornecedor cadastrado com sucesso!");
+    } else {
+        alert("Preencha todos os campos!");
+    }
+}
+
+function cadastrarTransacao() {
+    const data = prompt("Data:");
+    const descricao = prompt("Descrição:");
+    const valor = parseFloat(prompt("Valor:"));
+    const tipo = prompt("Tipo (receita/despesa):").toLowerCase();
+    if (data && descricao && !isNaN(valor) && (tipo === "receita" || tipo === "despesa")) {
+        transacoes.push({ data, descricao, valor, tipo });
+        exibirTransacoes();
+        alert("Transação cadastrada com sucesso!");
+    } else {
+        alert("Preencha os campos corretamente!");
+    }
+}
+
+// Funções para filtrar dados (simulando filtros)
+function filtrarClientes() {
+    const pesquisa = document.getElementById("pesquisaCliente").value.toLowerCase();
+    const clientesFiltrados = clientes.filter((cliente) => {
+        return (
+            cliente.nome.toLowerCase().includes(pesquisa) ||
+            cliente.cnpjCpf.includes(pesquisa) ||
+            cliente.endereco.toLowerCase().includes(pesquisa)
+        );
+    });
+    listaClientes.innerHTML = "";
+    clientesFiltrados.forEach((cliente) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${cliente.nome}</td>
+            <td>${cliente.cnpjCpf}</td>
+            <td>${cliente.endereco}</td>
+            <td>${cliente.contato}</td>
+            <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaClientes.appendChild(row);
+    });
+}
+
+function filtrarFornecedores() {
+    const pesquisa = document.getElementById("pesquisaFornecedor").value.toLowerCase();
+    const fornecedoresFiltrados = fornecedores.filter((fornecedor) => {
+        return (
+            fornecedor.nome.toLowerCase().includes(pesquisa) ||
+            fornecedor.cnpjCpf.includes(pesquisa) ||
+            fornecedor.endereco.toLowerCase().includes(pesquisa)
+        );
+    });
+    listaFornecedores.innerHTML = "";
+    fornecedoresFiltrados.forEach((fornecedor) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${fornecedor.nome}</td>
+            <td>${fornecedor.cnpjCpf}</td>
+            <td>${fornecedor.endereco}</td>
+            <td>${fornecedor.contato}</td>
+             <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaFornecedores.appendChild(row);
+    });
+}
+
+function filtrarTransacoes() {
+    const dataInicio = document.getElementById("filtroDataInicio").value;
+    const dataFim = document.getElementById("filtroDataFim").value;
+    const tipo = document.getElementById("filtroTipo").value.toLowerCase();
+    const pesquisa = document.getElementById("pesquisaTransacao").value.toLowerCase();
+
+    const transacoesFiltradas = transacoes.filter((transacao) => {
+        const dataTransacao = new Date(transacao.data);
+
+        const dataValida =
+            (!dataInicio || new Date(dataInicio) <= dataTransacao) &&
+            (!dataFim || new Date(dataFim) >= dataTransacao);
+
+        const tipoValido = !tipo || transacao.tipo === tipo;
+
+        const pesquisaValida =
+            transacao.descricao.toLowerCase().includes(pesquisa);
+
+        return dataValida && tipoValido && pesquisaValida;
+    });
+
+    listaTransacoes.innerHTML = "";
+    transacoesFiltradas.forEach((transacao) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${transacao.data}</td>
+            <td>${transacao.descricao}</td>
+            <td>R$ ${transacao.valor.toFixed(2)}</td>
+            <td>${transacao.tipo}</td>
+            <td><button class="btn-editar">Editar</button> <button class="btn-excluir">Excluir</button></td>
+        `;
+        listaTransacoes.appendChild(row);
+    });
+}
+
+// Função para gerar gráfico de fluxo de caixa
+function gerarRelatorioFluxoCaixa() {
+    const receitas = transacoes.filter(t => t.tipo === 'receita').reduce((acc, t) => acc + t.valor, 0);
+    const despesas = transacoes.filter(t => t.tipo === 'despesa').reduce((acc, t) => acc + t.valor, 0);
+
+    graficoRelatorioCtx.clearRect(0, 0, graficoRelatorioCtx.canvas.width, graficoRelatorioCtx.canvas.height);
+    new Chart(graficoRelatorioCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Receitas', 'Despesas'],
+            datasets: [{
+                label: 'Fluxo de Caixa',
+                data: [receitas, despesas],
+                backgroundColor:['#4CAF50', '#FF5252'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Relatório de Fluxo de Caixa',
+                    font: {
+                        size: 20
+                    }
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Função para gerar gráfico do dashboard
+function gerarGraficoDashboard() {
+    const receitaTotal = transacoes.filter(t => t.tipo === 'receita').reduce((acc, t) => acc + t.valor, 0);
+    const despesaTotal = transacoes.filter(t => t.tipo === 'despesa').reduce((acc, t) => acc + t.valor, 0);
+    const saldoAtual = receitaTotal - despesaTotal;
+
+    // Atualiza os valores dos cards
+    document.querySelector(".card:nth-child(1) p").textContent = `R$ ${receitaTotal.toFixed(2)}`;
+    document.querySelector(".card:nth-child(2) p").textContent = `R$ ${despesaTotal.toFixed(2)}`;
+    document.querySelector(".card:nth-child(3) p").textContent = `R$ ${saldoAtual.toFixed(2)}`;
+
+    graficoDashboardCtx.clearRect(0, 0, graficoDashboardCtx.canvas.width, graficoDashboardCtx.canvas.height);
+    new Chart(graficoDashboardCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Receitas', 'Despesas', 'Saldo'],
+            datasets: [{
+                label: 'Dashboard',
+                data: [receitaTotal, despesaTotal, saldoAtual],
+                backgroundColor: ['#4CAF50', '#FF5252', '#003366'],
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Visão Geral',
+                    font: {
+                        size: 20
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Event lista
+btnCadastrarCliente.addEventListener("click", cadastrarCliente);
+btnCadastrarFornecedor.addEventListener("click", cadastrarFornecedor);
+btnCadastrarTransacao.addEventListener("click", cadastrarTransacao);
+btnFiltrarCliente.addEventListener("click", filtrarClientes);
+btnFiltrarFornecedor.addEventListener("click", filtrarFornecedores);
+btnFiltrarTransacao.addEventListener("click", filtrarTransacoes);
+btnGerarRelatorioFluxoCaixa.addEventListener("click", gerarRelatorioFluxoCaixa);
+
+// Exibir dados iniciais e gerar gráficos
+exibirClientes();
+exibirFornecedores();
+exibirTransacoes();
+gerarGraficoDashboard();
+gerarRelatorioFluxoCaixa();
+    </script>
+</body>
+</html>
